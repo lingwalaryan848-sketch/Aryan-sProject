@@ -106,3 +106,104 @@ PARTITION BY YEAR(sale_date)
 ORDER BY AVG(total_sale) DESC
 )
 ```
+## DATA ANALYSIS AND FINDING
+
+
+### Q1. Retrieve all columns for sales made on '2022-11-05'
+
+```sql
+SELECT *
+FROM retail_sales
+WHERE sale_date = '2022-11-05';
+```
+
+### Q2. Retrieve all Clothing transactions with quantity greater than 4 in November 2022
+
+```sql
+SELECT *
+FROM retail_sales
+WHERE category = 'Clothing'
+AND quantity >= 4
+AND YEAR(sale_date) = 2022
+AND MONTH(sale_date) = 11;
+```
+
+### Q3. Calculate total sales for each category
+
+```sql
+SELECT category,
+       SUM(total_sale) AS total_sales
+FROM retail_sales
+GROUP BY category;
+```
+
+### Q4. Find the average age of customers who purchased Beauty products
+
+```sql
+SELECT AVG(age) AS avg_age
+FROM retail_sales
+WHERE category = 'Beauty';
+```
+
+### Q5. Find all transactions where total_sale is greater than 1000
+
+```sql
+SELECT *
+FROM retail_sales
+WHERE total_sale > 1000;
+```
+
+### Q6. Find total transactions made by each gender in each category
+
+```sql
+SELECT category,
+       gender,
+       COUNT(*) AS total_transactions
+FROM retail_sales
+GROUP BY category, gender;
+```
+
+### Q7. Find the best-selling month in each year
+
+```sql
+SELECT YEAR(sale_date) AS year,
+       MONTH(sale_date) AS month,
+       SUM(total_sale) AS total_sales
+FROM retail_sales
+GROUP BY YEAR(sale_date), MONTH(sale_date)
+ORDER BY total_sales DESC;
+```
+
+### Q8. Find the top 5 customers based on total sales
+
+```sql
+SELECT customer_id,
+       SUM(total_sale) AS total_sales
+FROM retail_sales
+GROUP BY customer_id
+ORDER BY total_sales DESC
+LIMIT 5;
+```
+
+### Q9. Find the number of unique customers in each category
+
+```sql
+SELECT category,
+       COUNT(DISTINCT customer_id) AS unique_customers
+FROM retail_sales
+GROUP BY category;
+```
+
+### Q10. Create shifts and count orders
+
+```sql
+SELECT
+CASE
+    WHEN HOUR(sale_time) < 12 THEN 'Morning'
+    WHEN HOUR(sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+    ELSE 'Evening'
+END AS Shift,
+COUNT(*) AS Total_Orders
+FROM retail_sales
+GROUP BY Shift;
+```
